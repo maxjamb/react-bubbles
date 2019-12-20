@@ -17,7 +17,7 @@ const Login = props => {
     event.preventDefault();
     axios.post("http://localhost:5000/api/login", user).then(res => {
       localStorage.setItem("token", res.data.payload);
-      props.history.push("/colors");
+      props.history.push("/bubbles");
     });
   };
   return (
