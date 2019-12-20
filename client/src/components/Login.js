@@ -1,13 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
-const Login = () => {
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
+const initialUser = {
+  username: "Lambda School",
+  password: "i<3Lambd4"
+};
+
+const Login = props => {
+  const [user, setUser] = useState(initialUser);
+
+  const handleChange = event => {
+    setUser({ ...user, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    axios.post("http://localhost:5000/api/login", user).then(res => {
+      localStorage.setItem("token", res.data.payload);
+      props.history.push("/colors");
+    });
+  };
   return (
-    <>
-      <h1>Welcome to the Bubble App!</h1>
-      <p>Build a login page here</p>
-    </>
+    <div className="lg-container">
+      <form className="lg-form" onSubmit={event => handleSubmit(event)}>
+        <h4>LOGIN</h4>
+        <div>
+          <input
+            required
+            name="username"
+            placeholder="Username"
+            value={user.username}
+            onChange={event => handleChange(event)}
+            className="lg-form-input"
+          />
+        </div>
+        <div>
+          <input
+            required
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={user.password}
+            onChange={event => handleChange(event)}
+            className="lg-form-input"
+          />
+        </div>
+
+        <div>
+          <button type="submit" className="lg-form-button">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
