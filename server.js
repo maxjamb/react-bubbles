@@ -137,14 +137,15 @@ app.put("/api/colors/:id", authenticator, (req, res) => {
     res
       .status(422)
       .send("Make sure your request body has all the fields it needs");
+  }else{
+    colors = colors.map(color => {
+      if (`${color.id}` === req.params.id) {
+        return req.body;
+      }
+      return color;
+    });
+    res.status(200).send(req.body);
   }
-  colors = colors.map(color => {
-    if (`${color.id}` === req.params.id) {
-      return req.body;
-    }
-    return color;
-  });
-  res.status(200).send(req.body);
 });
 
 app.delete("/api/colors/:id", authenticator, (req, res) => {

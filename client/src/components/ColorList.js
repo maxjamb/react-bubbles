@@ -6,7 +6,7 @@ const initialColor = {
   code: { hex: "" }
 };
 
-const ColorList = ({ colors, updateColors }) => {
+const ColorList = ({ colors, updateColors, fetchBubbles }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
@@ -18,17 +18,20 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = e => {
     e.preventDefault();
-    // Make a put request to save your updated color
+
     // think about where will you get the id from...
     // where is is saved right now?
     axiosWithAuth()
-      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colors)
+      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
-        updateColors(res.data);
+        console.log(res.data);
+        updateColors([...colors, res.data]);
+        console.log(colors);
+        setEditing(false);
+        fetchBubbles();
       })
       .catch(err => {
         console.log(err);
-        alert("An error occurred!");
       });
   };
 
